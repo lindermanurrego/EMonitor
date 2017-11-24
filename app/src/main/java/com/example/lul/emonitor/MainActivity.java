@@ -1,5 +1,6 @@
 package com.example.lul.emonitor;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +27,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements DownloadEqAsyncTask.DownloadEqsInterface {
     private ListView earthquakeListView;
+    public  final static String SELECT_EARTHQUAKE = "SELECTED_EARTHQUAKE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +75,14 @@ public class MainActivity extends AppCompatActivity implements DownloadEqAsyncTa
 
         earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                
+            public void onItemClick(AdapterView<?> adapterView, View view, int posicion, long l) {
+
+                Earthquake selectedEarthquake = eqAdapter.getItem(posicion);
+                Intent intent = new Intent(MainActivity.this,detailActivity.class);
+                intent.putExtra(SELECT_EARTHQUAKE, selectedEarthquake);
+                startActivity(intent);
+
+
             }
         });
 
