@@ -1,8 +1,15 @@
 package com.example.lul.emonitor;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,34 +18,37 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 /**
  * Created by User on 18/11/2017.
  */
 
-public class DownloadEqAsyncTask extends AsyncTask<URL,Void,String> {
+public class DownloadEqAsyncTask extends AsyncTask<URL,Void,ArrayList<Earthquake>> {
     String eqData = "";
     public DownloadEqsInterface delegate;
 
     public interface DownloadEqsInterface{
-        void onEqsDownloaded(String eqsData);
+        void onEqsDownloaded(ArrayList<Earthquake> eqList);
     }
 
     @Override
-    protected String doInBackground(URL...urls) {
+    protected ArrayList<Earthquake> doInBackground(URL...urls) {
+        ArrayList<Earthquake> eqList = null;
         try{
             eqData = downloadData(urls[0]);
+            eqList = parseDataFromJson(eqData);
         }catch (IOException e){
             e.printStackTrace();
         }
-        return eqData;
+        return eqList ;
     }
 
     @Override
-    protected void onPostExecute(String eqData) {
+    protected void onPostExecute(ArrayList<Earthquake> eqList) {
 
-        super.onPostExecute(eqData);
-        delegate.onEqsDownloaded(eqData);
+        super.onPostExecute(eqList);
+        delegate.onEqsDownloaded(eqList);
     }
 
     private String downloadData(URL url) throws IOException {
@@ -56,9 +66,6 @@ public class DownloadEqAsyncTask extends AsyncTask<URL,Void,String> {
             inputStream = urlConnection.getInputStream();
             jsonResponse = readFromStream(inputStream);
         } catch (IOException e){
-/*            Toast.makeText(this,"",Toast.LENGTH_LONG);
-            Toast.makeText(this, "Hubo error al descargar los datos de terremotos", Toast.LENGTH_SHORT).show();
-*/
         }finally {
 
             if (urlConnection != null){
@@ -90,4 +97,25 @@ public class DownloadEqAsyncTask extends AsyncTask<URL,Void,String> {
         return output.toString();
     }
 
+    public ArrayList<Earthquake> parseDataFromJson(String eqsData) {
+        ArrayList<Earthquake> eqList = new ArrayList<>();
+
+        try {
+            JSONObject jsonObject = new JSONObject(eqsData);
+            JSONArray featuresJsonArray = jsonObject.getJSONArray("features");
+
+            for (int i=0;i<featuresJsonArray.length();i++){
+                JSONObject featuresJsonObject = featuresJsonArray.getJSONObject(i);
+                JSONObject propertiesJsonObject = featuresJsonObject.getJSONObject("properties");
+                Double magnitud = propertiesJsonObject.getDouble("mag");
+                String place = propertiesJsonObject.getString("place");
+                eqList.add(new Earthquake(magnitud,place));
+                Log.d("Manzana",magnitud + ";" + place);
+                }
+            } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d(eqsData,"s");
+        return  eqList;
+    }
 }

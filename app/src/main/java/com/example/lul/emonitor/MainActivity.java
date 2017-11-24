@@ -35,11 +35,8 @@ public class MainActivity extends AppCompatActivity implements DownloadEqAsyncTa
         setContentView(R.layout.activity_main);
 
        earthquakeListView = findViewById(R.id.earthquake_list_view);
-
         DownloadEqAsyncTask  downloadEqAsyncTask = new DownloadEqAsyncTask();
         downloadEqAsyncTask.delegate = this;
-
-
         try {
             downloadEqAsyncTask.execute(new URL("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson"));
         } catch (MalformedURLException e) {
@@ -47,29 +44,9 @@ public class MainActivity extends AppCompatActivity implements DownloadEqAsyncTa
         }
 
     }
-
-
     @Override
-    public void onEqsDownloaded(String eqsData) {
-        ArrayList<Earthquake> eqList = new ArrayList<>();
+    public void onEqsDownloaded(ArrayList<Earthquake> eqList) {
 
-        try {
-            JSONObject  jsonObject = new JSONObject(eqsData);
-            JSONArray   featuresJsonArray = jsonObject.getJSONArray("features");
-
-            for (int i=0;i<featuresJsonArray.length();i++){
-                JSONObject featuresJsonObject = featuresJsonArray.getJSONObject(i);
-                JSONObject propertiesJsonObject = featuresJsonObject.getJSONObject("properties");
-                Double magnitud = propertiesJsonObject.getDouble("mag");
-                String place = propertiesJsonObject.getString("place");
-                eqList.add(new Earthquake(magnitud,place));
-                Log.d("Manzana",magnitud + ";" + place);
-            }
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         final EqAdapter eqAdapter = new EqAdapter(this,R.layout.eq_list_item,eqList);
         earthquakeListView.setAdapter(eqAdapter);
 
@@ -86,8 +63,5 @@ public class MainActivity extends AppCompatActivity implements DownloadEqAsyncTa
             }
         });
 
-
-
-        Log.d(eqsData,"s");
     }
 }
