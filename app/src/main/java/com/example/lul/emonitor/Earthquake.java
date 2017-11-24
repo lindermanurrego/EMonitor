@@ -5,20 +5,20 @@ package com.example.lul.emonitor;
  */
 
 public class Earthquake {
-    private String magnitude;
+    private Double magnitude;
     private String place;
 
 
-    public Earthquake(String magnitude, String place) {
+    public Earthquake(Double magnitude, String place) {
         this.magnitude = magnitude;
         this.place = place;
     }
 
-    public String getMagnitude() {
+    public Double getMagnitude() {
         return magnitude;
     }
 
-    public void setMagnitude(String magnitude) {
+    public void setMagnitude(Double magnitude) {
         this.magnitude = magnitude;
     }
 

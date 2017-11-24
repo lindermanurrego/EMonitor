@@ -23,25 +23,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements DownloadEqAsyncTask.DownloadEqsInterface {
+    private ListView earthquakeListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView earthquakeListView = (ListView) findViewById(R.id.earthquake_list_view);
-
-        ArrayList<Earthquake> eqList = new ArrayList<>();
-        eqList.add(new Earthquake("4.6","Indonesia"));
-        eqList.add(new Earthquake("3.2","China"));
-        eqList.add(new Earthquake("2.5","Japon"));
-
-
-        EqAdapter eqAdapter = new EqAdapter(this,R.layout.eq_list_item,eqList);
-        earthquakeListView.setAdapter(eqAdapter);
+       earthquakeListView = findViewById(R.id.earthquake_list_view);
 
         DownloadEqAsyncTask  downloadEqAsyncTask = new DownloadEqAsyncTask();
         downloadEqAsyncTask.delegate = this;
+
+
         try {
             downloadEqAsyncTask.execute(new URL("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson"));
         } catch (MalformedURLException e) {
@@ -53,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements DownloadEqAsyncTa
 
     @Override
     public void onEqsDownloaded(String eqsData) {
+        ArrayList<Earthquake> eqList = new ArrayList<>();
 
         try {
             JSONObject  jsonObject = new JSONObject(eqsData);
@@ -61,8 +56,9 @@ public class MainActivity extends AppCompatActivity implements DownloadEqAsyncTa
             for (int i=0;i<featuresJsonArray.length();i++){
                 JSONObject featuresJsonObject = featuresJsonArray.getJSONObject(i);
                 JSONObject propertiesJsonObject = featuresJsonObject.getJSONObject("properties");
-                double magnitud = propertiesJsonObject.getDouble("mag");
+                Double magnitud = propertiesJsonObject.getDouble("mag");
                 String place = propertiesJsonObject.getString("place");
+                eqList.add(new Earthquake(magnitud,place));
                 Log.d("Manzana",magnitud + ";" + place);
             }
 
@@ -70,7 +66,8 @@ public class MainActivity extends AppCompatActivity implements DownloadEqAsyncTa
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        EqAdapter eqAdapter = new EqAdapter(this,R.layout.eq_list_item,eqList);
+        earthquakeListView.setAdapter(eqAdapter);
 
         Log.d(eqsData,"s");
     }
