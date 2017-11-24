@@ -3,6 +3,8 @@ package com.example.lul.emonitor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -66,8 +68,17 @@ public class MainActivity extends AppCompatActivity implements DownloadEqAsyncTa
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        EqAdapter eqAdapter = new EqAdapter(this,R.layout.eq_list_item,eqList);
+        final EqAdapter eqAdapter = new EqAdapter(this,R.layout.eq_list_item,eqList);
         earthquakeListView.setAdapter(eqAdapter);
+
+        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                
+            }
+        });
+
+
 
         Log.d(eqsData,"s");
     }
