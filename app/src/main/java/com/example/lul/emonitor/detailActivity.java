@@ -3,6 +3,7 @@ package com.example.lul.emonitor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+
 public class detailActivity extends AppCompatActivity {
 
     @Override
