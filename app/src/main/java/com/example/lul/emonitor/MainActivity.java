@@ -58,10 +58,7 @@ public class MainActivity extends AppCompatActivity implements DownloadEqAsyncTa
                 Intent intent = new Intent(MainActivity.this,detailActivity.class);
                 intent.putExtra(SELECT_EARTHQUAKE, selectedEarthquake);
                 startActivity(intent);
-
-
             }
         });
-
     }
 }
