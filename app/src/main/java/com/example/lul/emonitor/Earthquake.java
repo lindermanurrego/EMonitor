@@ -10,11 +10,42 @@ import android.os.Parcelable;
 public class Earthquake implements Parcelable {
     private Double magnitude;
     private String place;
+    private Long time;
+    private String longitude;
+    private String latitude;
 
 
-    public Earthquake(Double magnitude, String place) {
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time = time;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public Earthquake(Double magnitude, String place, Long time, String longitude, String latitude) {
         this.magnitude = magnitude;
         this.place = place;
+        this.time = time;
+        this.latitude = latitude;
+
+        this.longitude = longitude;
     }
 
     public Double getMagnitude() {
@@ -42,14 +73,20 @@ public class Earthquake implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(this.magnitude);
         dest.writeString(this.place);
+        dest.writeValue(this.time);
+        dest.writeString(this.longitude);
+        dest.writeString(this.latitude);
     }
 
     protected Earthquake(Parcel in) {
         this.magnitude = (Double) in.readValue(Double.class.getClassLoader());
         this.place = in.readString();
+        this.time = (Long) in.readValue(Long.class.getClassLoader());
+        this.longitude = in.readString();
+        this.latitude = in.readString();
     }
 
-    public static final Parcelable.Creator<Earthquake> CREATOR = new Parcelable.Creator<Earthquake>() {
+    public static final Creator<Earthquake> CREATOR = new Creator<Earthquake>() {
         @Override
         public Earthquake createFromParcel(Parcel source) {
             return new Earthquake(source);
