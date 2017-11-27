@@ -20,7 +20,7 @@ public class detailActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         Earthquake earthquake = extras.getParcelable(MainActivity.SELECT_EARTHQUAKE);
-        
+
         if (earthquake != null) {
             TextView magnitudeTextView = (TextView) findViewById(R.id.eq_detail_magnitude);
             TextView longitudeTextView = (TextView) findViewById(R.id.eq_detail_longitude);
