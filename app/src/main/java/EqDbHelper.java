@@ -2,6 +2,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.lul.emonitor.EqContract;
+
 /**
  * Created by Usre on 27/11/2017.
  */
@@ -17,12 +19,12 @@ public class EqDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
              String EARTHQUAKES_DATABASE = "CREATE TABLE " + DATABASE_NAME + "("+
-                     "_id" + " INTEGER PRIMARI KEY AUTOINCREMENT, " +
-                     "magnitude" + " REAL NOT NULL, " +
-                     "place" + " TEXT NOT NULL, " +
-                     "longitude" + " TEXT NOT NULL, " +
-                     "latitude" + " TEXT NOT NULL, " +
-                     "time" + " TEXT NOT NULL, " +
+                     EqContract.EqColumns._ID + " INTEGER PRIMARI KEY AUTOINCREMENT, " +
+                     EqContract.EqColumns.MAGNITUDE + " REAL NOT NULL, " +
+                     EqContract.EqColumns.PLACE + " TEXT NOT NULL, " +
+                     EqContract.EqColumns.LONGITUDE + " TEXT NOT NULL, " +
+                     EqContract.EqColumns.LATITUDE + " TEXT NOT NULL, " +
+                     EqContract.EqColumns.TIME + " TEXT NOT NULL, " +
                      ")";
              sqLiteDatabase.execSQL(EARTHQUAKES_DATABASE);
     }
