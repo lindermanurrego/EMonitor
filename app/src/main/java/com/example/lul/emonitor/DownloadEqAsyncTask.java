@@ -1,5 +1,6 @@
 package com.example.lul.emonitor;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -27,21 +28,30 @@ import java.util.ArrayList;
 public class DownloadEqAsyncTask extends AsyncTask<URL,Void,ArrayList<Earthquake>> {
     String eqData = "";
     public DownloadEqsInterface delegate;
+    private Context context;
 
     public interface DownloadEqsInterface{
         void onEqsDownloaded(ArrayList<Earthquake> eqList);
     }
 
+    public DownloadEqAsyncTask(Context context){
+        this.context = context;
+    }
     @Override
     protected ArrayList<Earthquake> doInBackground(URL...urls) {
         ArrayList<Earthquake> eqList = null;
         try{
             eqData = downloadData(urls[0]);
             eqList = parseDataFromJson(eqData);
+            saveEqsOnDataBase(eqList);
         }catch (IOException e){
             e.printStackTrace();
         }
         return eqList ;
+    }
+
+    private void saveEqsOnDataBase(ArrayList<Earthquake> eqList) {
+        EqDbHelper  eqDbHelper = new EqDbHelper(this);
     }
 
     @Override
