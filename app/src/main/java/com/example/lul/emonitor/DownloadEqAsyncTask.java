@@ -1,7 +1,9 @@
 package com.example.lul.emonitor;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -51,7 +53,21 @@ public class DownloadEqAsyncTask extends AsyncTask<URL,Void,ArrayList<Earthquake
     }
 
     private void saveEqsOnDataBase(ArrayList<Earthquake> eqList) {
-        EqDbHelper  eqDbHelper = new EqDbHelper(this);
+        EqDbHelper  eqDbHelper = new EqDbHelper(this.context);
+        SQLiteDatabase database = eqDbHelper.getWritableDatabase();
+
+        for (Earthquake earthquake : eqList){
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(EqContract.EqColumns.LATITUDE,earthquake.getLatitude());
+            contentValues.put(EqContract.EqColumns.LONGITUDE,earthquake.getLongitude());
+            contentValues.put(EqContract.EqColumns.MAGNITUDE,earthquake.getMagnitude());
+            contentValues.put(EqContract.EqColumns.PLACE,earthquake.getPlace());
+            contentValues.put(EqContract.EqColumns.TIME,earthquake.getTime());
+
+            database.insert(EqContract.EqColumns.TABLE_NAME,null,contentValues);
+
+        }
     }
 
     @Override
