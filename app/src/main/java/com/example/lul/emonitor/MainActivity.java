@@ -35,13 +35,19 @@ public class MainActivity extends AppCompatActivity implements DownloadEqAsyncTa
         setContentView(R.layout.activity_main);
 
        earthquakeListView = findViewById(R.id.earthquake_list_view);
-        DownloadEqAsyncTask  downloadEqAsyncTask = new DownloadEqAsyncTask(this);
-        downloadEqAsyncTask.delegate = this;
-        try {
-            downloadEqAsyncTask.execute(new URL("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson"));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+
+       if(Utils.isNetworwAvailable(this)) {
+           DownloadEqAsyncTask downloadEqAsyncTask = new DownloadEqAsyncTask(this);
+           downloadEqAsyncTask.delegate = this;
+           try {
+               downloadEqAsyncTask.execute(new URL("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson"));
+           } catch (MalformedURLException e) {
+               e.printStackTrace();
+           }
+       }else{
+           //Leer la base de datos
+
+       }
 
     }
     @Override
