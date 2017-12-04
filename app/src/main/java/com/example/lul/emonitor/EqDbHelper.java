@@ -21,7 +21,7 @@ public class EqDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
              String EARTHQUAKES_DATABASE = "CREATE TABLE " + EqContract.EqColumns.TABLE_NAME + "("+
-                     EqContract.EqColumns._ID + " INTEGER PRIMARI KEY AUTOINCREMENT, " +
+                     EqContract.EqColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                      EqContract.EqColumns.MAGNITUDE + " REAL NOT NULL, " +
                      EqContract.EqColumns.PLACE + " TEXT NOT NULL, " +
                      EqContract.EqColumns.LONGITUDE + " TEXT NOT NULL, " +
